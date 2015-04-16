@@ -9,10 +9,11 @@ fab.env.colors = True
 
 COMMANDS = ('sudo apt-get install ttyrec',
         )
+SCRIPTS = ('termcast', 'termcast-play')
 
 inetdConfTemplate = '''
-telnet stream tcp4 nowait {user} /usr/sbin/tcpd {installDir}/termcast-play
-telnet stream tcp6 nowait {user} /usr/sbin/tcpd {installDir}/termcast-play
+telnet stream tcp4 nowait {user} /usr/sbin/tcpd /usr/bin/termcast-play
+telnet stream tcp6 nowait {user} /usr/sbin/tcpd /usr/bin/termcast-play
 '''
 
 def write_sudo_file(filename, text):
@@ -27,8 +28,13 @@ def install():
     for command in COMMANDS:
         fab.local(command)
 
-    values = {'user': user,
-              'installDir': installDir}
+    values = {'user': user}
+
+    linkCommand = 'sudo ln -s {src} /usr/bin'
+    for script in SCRIPTS:
+        fab.local(linkCommand.format(os.path.join(installDir, script)))
+
     inetdConfText = inetdConfTemplate.format(**values)
 
     write_sudo_file('/etc/inetd.conf', inetdConfText)
+    fab.local('sudo /etc/init.d/openbsd-inetd')
