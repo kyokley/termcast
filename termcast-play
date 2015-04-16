@@ -1,0 +1,20 @@
+#!/bin/bash
+HOME=/home/yokley
+CASTS=$HOME/workspace/termcast/casts
+CURRENT="$CASTS/current"
+
+clear
+
+if [ ! -e $CURRENT ]; then
+    FILENAME=$CASTS/`ls "$CASTS" -1t | head -n 1`
+    if [ ! -f $FILENAME ]; then
+        echo "No termcasts"
+        exit
+    fi
+    CURRENT=$FILENAME
+    echo $CURRENT
+    ttyplay "$CURRENT"
+else
+    ttyplay -p "$CURRENT"
+fi
+echo "Termcast done"
