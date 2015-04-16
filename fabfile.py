@@ -30,11 +30,14 @@ def install():
 
     values = {'user': user}
 
-    linkCommand = 'sudo ln -s {src} /usr/bin'
+    linkCommand = 'sudo ln -s {0} /usr/bin'
     for script in SCRIPTS:
-        fab.local(linkCommand.format(os.path.join(installDir, script)))
+        try:
+            fab.local(linkCommand.format(os.path.join(installDir, script)))
+        except:
+            pass
 
     inetdConfText = inetdConfTemplate.format(**values)
 
     write_sudo_file('/etc/inetd.conf', inetdConfText)
-    fab.local('sudo /etc/init.d/openbsd-inetd')
+    fab.local('sudo /etc/init.d/openbsd-inetd restart')
