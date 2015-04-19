@@ -24,18 +24,24 @@ CASTS={casts}
 CURRENT="$CASTS/current"
 
 clear
-
-if [ ! -e $CURRENT ]; then
-    FILENAME=$CASTS/`ls "$CASTS" -1t | head -n 1`
-    if [ ! -f $FILENAME ]; then
-        echo "No termcasts"
-        exit
-    fi
-    CURRENT=$FILENAME
-    echo $CURRENT
-    ttyplay "$CURRENT"
+if [ $# -eq 1 ]
+then
+    FILENAME="$CASTS/$1"
+    ttyplay "$FILENAME"
 else
-    ttyplay -p "$CURRENT"
+    if [ ! -e $CURRENT ]; then
+        FILENAME=$CASTS/`ls "$CASTS" -1t | head -n 1`
+        if [ ! -f $FILENAME ]; then
+            echo "No termcasts"
+            exit
+        fi
+        CURRENT=$FILENAME
+        echo $CURRENT
+        ttyplay "$CURRENT"
+    else
+        ttyplay -p "$CURRENT"
+    fi
 fi
+
 echo "Termcast done"
 '''
