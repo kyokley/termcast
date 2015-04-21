@@ -6,7 +6,6 @@ mkdir -p $CASTS
 
 touch $CURRENT
 ttyrec -a "$CURRENT" -e "/usr/bin/screen -c {installDir}/screenrc"
-killall telnet
 
 if [ $# -eq 1 ]
 then
