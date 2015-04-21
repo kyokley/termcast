@@ -44,21 +44,17 @@ def install():
               'termcastPlayPath': os.path.join(installDir, 'termcast-play'),
               'casts': casts}
 
-    try:
+    with fab.settings(warn_only=True):
         fab.local('rm {}'.format(values['termcastPath']))
         fab.local('rm {}'.format(values['termcastPlayPath']))
-    except:
-        pass
 
     write_file(values['termcastPath'], termcastTemplate.format(**values))
     write_file(values['termcastPlayPath'], termcastPlayTemplate.format(**values))
 
     linkCommand = 'sudo ln -s {} /usr/bin'
     for script in SCRIPTS:
-        try:
+        with fab.settings(warn_only=True):
             fab.local(linkCommand.format(os.path.join(installDir, script)))
-        except:
-            pass
 
     inetdConfText = inetdConfTemplate.format(**values)
 
