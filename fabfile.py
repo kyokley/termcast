@@ -9,7 +9,7 @@ import os, getpass
 
 fab.env.colors = True
 
-COMMANDS = ('sudo apt-get install ttyrec',
+COMMANDS = ('sudo apt-get install ttyrec screen',
         )
 SCRIPTS = ('termcast', 'termcast-play')
 
